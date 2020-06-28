@@ -17,14 +17,15 @@ def on_connect(client, userdata, flags, rc):
     print('Connected with result code ' + str(rc))
     client.subscribe(MQTT_TOPIC)
 
-
 def on_message(client, userdata, msg):
     """The callback for when a PUBLISH message is received from the server."""
     print(msg.topic + ' ' + str(msg.payload))
+    f.write(msg.payload)
+    f.close()
 
 
 def main():
-
+    f= open("data.txt","a+")
     mqtt_client = mqtt.Client(MQTT_CLIENT_ID)
     mqtt_client.username_pw_set(MQTT_USER, MQTT_PASSWORD)
     mqtt_client.on_connect = on_connect
