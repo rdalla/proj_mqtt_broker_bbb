@@ -18,14 +18,14 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe(MQTT_TOPIC)
 
 def on_message(client, userdata, msg):
-    """The callback for when a PUBLISH message is received from the server."""
-    print(msg.topic + ' ' + str(msg.payload))
-    f.write(msg.payload)
-    f.close()
-
+    #print(msg.topic + ' ' + str(msg.payload))
+    path = '/home/debian/data.json'
+    data_file = open(path,'a')
+    data_file.write(str(msg.payload))
+    print(str(msg.payload))
+    data_file.close()
 
 def main():
-    f= open("data.txt","a+")
     mqtt_client = mqtt.Client(MQTT_CLIENT_ID)
     mqtt_client.username_pw_set(MQTT_USER, MQTT_PASSWORD)
     mqtt_client.on_connect = on_connect
