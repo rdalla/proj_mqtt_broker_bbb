@@ -20,10 +20,14 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     #print(msg.topic + ' ' + str(msg.payload))
     path = '/home/debian/data.json'
-    data_file = open(path,'a')
-    data_file.write(str(msg.payload))
-    print(str(msg.payload))
-    data_file.close()
+    #data_file = open(path,'a')
+    with open(path, 'a') as f:
+        json.dump(msg.payload, f)  # writing JSON object
+        print(json.dumps(msg.payload))
+    #data_file.write(msg.payload)
+    #data_file.write(str(msg.payload))
+    #print(str(msg.payload))
+    #data_file.close()
 
 def main():
     mqtt_client = mqtt.Client(MQTT_CLIENT_ID)
