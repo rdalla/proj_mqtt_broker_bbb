@@ -21,9 +21,8 @@ def on_message(client, userdata, msg):
     #print(msg.topic + ' ' + str(msg.payload))
     path = '/home/debian/data.json'
     #data_file = open(path,'a')
-    with open(path, 'a') as f:
-        json.dump(msg.payload, f)  # writing JSON object
-        print(json.dumps(msg.payload))
+    with open(path, 'a', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=4)
     #data_file.write(msg.payload)
     #data_file.write(str(msg.payload))
     #print(str(msg.payload))
