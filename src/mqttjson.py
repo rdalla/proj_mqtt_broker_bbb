@@ -6,7 +6,7 @@ This script receives MQTT data and saves those to JSON file.
 
 import paho.mqtt.client as mqtt
 
-MQTT_ADDRESS = '192.168.1.101'
+MQTT_ADDRESS = '192.168.1.103'
 MQTT_USER = 'rdalla'
 MQTT_PASSWORD = 'vao1ca'
 MQTT_TOPIC = '/home'
@@ -18,15 +18,11 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe(MQTT_TOPIC)
 
 def on_message(client, userdata, msg):
-    #print(msg.topic + ' ' + str(msg.payload))
+    print(msg.topic + ' ' + msg.payload.decode())
     path = '/home/debian/data.json'
-    #data_file = open(path,'a')
-    with open(path, 'a', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False, indent=4)
-    #data_file.write(msg.payload)
-    #data_file.write(str(msg.payload))
-    #print(str(msg.payload))
-    #data_file.close()
+    data_file = open(path,'a')
+    data_file.write(msg.payload.decode())
+    data_file.close()
 
 def main():
     mqtt_client = mqtt.Client(MQTT_CLIENT_ID)
