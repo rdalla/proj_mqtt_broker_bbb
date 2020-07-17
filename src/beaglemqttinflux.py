@@ -16,7 +16,6 @@ from influxdb import InfluxDBClient
 MQTT_ADDRESS = '192.168.1.101'
 MQTT_USER = 'rdalla'
 MQTT_PASSWORD = 'vao1ca'
-#MQTT_TOPIC = '/home'
 MQTT_TOPIC = 'home/+/+' # [sensor]/[irms|kwh|cost]
 MQTT_REGEX = 'home/([^/]+)/([^/]+)'
 MQTT_CLIENT_ID = 'DallaValleMQTTBroker'
@@ -32,9 +31,6 @@ measurement_name = "home_power"
 # connect to influx
 ifclient = InfluxDBClient(ifhost,ifport,ifuser,ifpass,ifdb)
 
-# take a timestamp for this measurement
-time = datetime.datetime.utcnow()
-
 class SensorData(NamedTuple):
     location: str
     measurement: str
@@ -47,7 +43,7 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, msg):
     """The callback for when a PUBLISH message is received from the server."""
-    print(msg.topic + ' ' + str(msg.payload))
+    #print(msg.topic + ' ' + msg.payload.decode())
     sensor_data = _parse_mqtt_message(msg.topic, msg.payload.decode('utf-8'))
     if sensor_data is not None:
         _send_sensor_data_to_influxdb(sensor_data)
@@ -63,15 +59,13 @@ def _parse_mqtt_message(topic, payload):
 
 # format the data as a single measurement for influx
 def _send_sensor_data_to_influxdb(sensor_data):
+    time = datetime.datetime.utcnow()
     json_body = [
         {
             'measurement': measurement_name,
             'time':time,
-            'tags': {
-                'location': sensor_data.measurement
-            },
             'fields': {
-                'value': sensor_data.value
+                sensor_data.measurement: sensor_data.value
             }
         }
     ]
