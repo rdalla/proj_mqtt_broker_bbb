@@ -26,7 +26,7 @@ ifpass = "dallavalle"
 ifdb   = "home"
 ifhost = "192.168.1.101"
 ifport = 8086
-measurement_name = "consumption"
+measurement_name = "power_meter"
 
 # connect to influx
 ifclient = InfluxDBClient(ifhost,ifport,ifuser,ifpass,ifdb)
