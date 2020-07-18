@@ -26,7 +26,7 @@ ifpass = "dallavalle"
 ifdb   = "home"
 ifhost = "192.168.1.101"
 ifport = 8086
-measurement_name = "home_power"
+measurement_name = "consumption"
 
 # connect to influx
 ifclient = InfluxDBClient(ifhost,ifport,ifuser,ifpass,ifdb)
@@ -38,12 +38,12 @@ class SensorData(NamedTuple):
 
 def on_connect(client, userdata, flags, rc):
     """ The callback for when the client receives a CONNACK response from the server."""
-    print('Connected with result code ' + str(rc))
+    #print('Connected with result code ' + str(rc))
     client.subscribe(MQTT_TOPIC)
 
 def on_message(client, userdata, msg):
     """The callback for when a PUBLISH message is received from the server."""
-    #print(msg.topic + ' ' + msg.payload.decode())
+    print(msg.topic + ' ' + msg.payload.decode())
     sensor_data = _parse_mqtt_message(msg.topic, msg.payload.decode('utf-8'))
     if sensor_data is not None:
         _send_sensor_data_to_influxdb(sensor_data)
