@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """A MQTT Broker
-This script receives MQTT data and saves those to JSON file.
+This script receives MQTT data and saves those to InfluxDB.
 """
 import re
 from typing import NamedTuple
